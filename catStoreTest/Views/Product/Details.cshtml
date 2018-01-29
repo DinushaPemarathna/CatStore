@@ -1,0 +1,51 @@
+﻿@model catStoreTest.Models.Product
+
+<div>
+
+    <div class="modal-header">
+
+        <h4 class="modal-title" id="myModalLabel">Product Details</h4>
+    </div>
+
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dd>
+            <img src="@Model.ImgURL" height="126" width="126" />
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd>
+            @String.Format("{0:F}", @Model.Price)
+        </dd>
+        <p class="button">
+            @Html.ActionLink("Add to cart", "AddToCart",
+                "ShoppingCart", Model, "")
+        </p>
+
+    </dl>
+</div>
+
+

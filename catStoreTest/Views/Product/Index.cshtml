@@ -1,0 +1,128 @@
+﻿@*@{
+        ViewBag.Title = "Index";
+    }*@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Product List</title>
+</head>
+<body>
+    <div class="productAll">
+        <h2>Search Products by Name</h2>
+        <input type="text" id="prodId" size="100" />
+        <input type="button" value="Search" onclick=" javascript: find(); " />
+        <p id="product" />
+    </div>
+    <div>
+        <h2>All Products</h2>
+        <ul id="products" />
+    </div>
+</body>
+
+
+
+<script src="/Scripts/jquery-1.10.2.min.js"></script>
+<script>
+
+
+    $(document).ready(function () {
+
+        var uri = 'http://localhost:3967/api/Products/';
+        //alert('');
+
+
+        $.ajax({
+            url: uri,
+            data: {
+                format: 'json'
+            },
+            dataType: 'json',
+            success: function (data) {
+                // On success, 'data' contains a list of products.
+                $.each(data, function (key, item) {
+                    // Add a list item for the product.
+
+                    var $link = '<li><img height="84" width="84" src="' + formatImage(item) + '">' + '<a href="/Product/Details/' + formatID(item) + '">' + formatItem(item) + '</a>' + '</li>';
+                    //$link += '<a href="/Product/Details/' + formatID(item) + '">"' + formatItem(item) + '</a>';
+                    //$link += '<br/><a href="javascript:void(0);" class="anchorDetail"  data-id="' + formatID(item) + '">Details</a>';
+
+                    $('#products').append($link);
+                });
+            },
+            error: function (jqXHR, textStatus, err) {
+                alert('request failed');
+                alert('' + uri);
+            },
+            type: 'GET'
+        });
+
+
+        //// Send an AJAX request
+        //$.getJSON(uri)
+        //    .done(function (data) {
+        //        // On success, 'data' contains a list of products.
+        //        $.each(data, function (key, item) {
+        //            // Add a list item for the product.
+        //            $('<li>', { text: formatItem(item) } ).appendTo($('#products'));
+        //            //$('<img src=', formatImage(item),'>').appendTo($('#products'));
+        //        });
+        //    });
+    });
+
+    function find() {
+        var uri1 = 'http://localhost:3967/api/Products/GetProduct';
+
+        var filtername = $('#prodId').val();
+
+        filtername = $.trim(filtername);
+
+        uri1 = uri1 + '/' + filtername;
+        //alert('' + uri1);
+
+
+
+        $('#product').empty();
+
+        $.ajax({
+            url: uri1,
+            data: {
+                format: 'json'
+            },
+            dataType: 'json',
+            success: function (data) {
+                // On success, 'data' contains a list of products.
+                $.each(data, function (key, item) {
+                    // Add a list item for the product.
+
+                    var $link1 = '<li><img height="84" width="84" src="' + formatImage(item) + '">' + formatItem(item) + '</li>';
+                    $('#product').append($link1);
+
+                });
+            },
+            error: function (jqXHR, textStatus, err) {
+                alert('request failed');
+                $('#product').text('Error: ' + err);
+            },
+            type: 'GET'
+        });
+    }
+
+    function formatItem(item) {
+        return item.Name;
+    }
+
+    function formatImage(item) {
+        return item.imageUrl;
+    }
+
+    function formatID(item) {
+        return item.Code;
+    }
+
+
+</script>
+
+</html>
+
+
